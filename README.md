@@ -1,9 +1,12 @@
-RARS -- RISC-V Assembler and Runtime Simulator
+M-RARS -- RISC-V Assembler and Runtime Simulator (Dark Theme Hackjob)
 ----------------------------------------------
+
+M-RARS is a fork of the original RARS that adds a hardcoded dark theme into the source code.
+It isn't very pretty, but it should work. Used the library [Material-UI-Swing](https://github.com/atarw/material-ui-swing) for UI elements and basic theme, colors were inspired by Atom and a few other IDEs. Customization is minimally supported at the moment.
 
 RARS, the RISC-V Assembler, Simulator, and Runtime, will assemble and simulate
 the execution of RISC-V assembly language programs. Its primary goal is to be
-an effective development environment for people getting started with RISC-V. 
+an effective development environment for people getting started with RISC-V.
 
 ## Features
 
@@ -16,11 +19,11 @@ an effective development environment for people getting started with RISC-V.
 
 ## Documentation
 
-Documentation for supported [instructions](https://github.com/TheThirdOne/rars/wiki/Supported-Instructions), [system calls](https://github.com/TheThirdOne/rars/wiki/Environment-Calls), [assembler directives](https://github.com/TheThirdOne/rars/wiki/Assembler-Directives) and more can be found on the [wiki](https://github.com/TheThirdOne/rars/wiki). Documentation included in the download can be accessed via the help menu. 
+Documentation for supported [instructions](https://github.com/TheThirdOne/rars/wiki/Supported-Instructions), [system calls](https://github.com/TheThirdOne/rars/wiki/Environment-Calls), [assembler directives](https://github.com/TheThirdOne/rars/wiki/Assembler-Directives) and more can be found on the [wiki](https://github.com/TheThirdOne/rars/wiki). Documentation included in the download can be accessed via the help menu.
 
 ## Download
 
-RARS is distributed as an executable jar. You will need at least Java 8 to run it. 
+RARS is distributed as an executable jar. You will need at least Java 8 to run it.
 
 The latest stable release can be found [here](https://github.com/TheThirdOne/rars/releases/latest), a release with the latest developments can be found on the [continuous release](https://github.com/TheThirdOne/rars/releases/tag/continuous), and the [releases page](https://github.com/TheThirdOne/rars/releases) contains all previous stable releases with patch notes.
 
