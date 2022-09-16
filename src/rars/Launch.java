@@ -1,5 +1,10 @@
 package rars;
 
+import mdlaf.MaterialLookAndFeel;
+import mdlaf.themes.JMarsDarkTheme;
+import mdlaf.themes.MaterialOceanicTheme;
+import mdlaf.themes.MaterialTheme;
+import mdlaf.utils.MaterialColors;
 import rars.api.Program;
 import rars.riscv.InstructionSet;
 import rars.riscv.dump.DumpFormat;
@@ -10,10 +15,12 @@ import rars.simulator.Simulator;
 import rars.util.Binary;
 import rars.util.FilenameFinder;
 import rars.util.MemoryDump;
+
 import rars.venus.VenusUI;
 import rars.api.Options;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,6 +29,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.util.Set;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
+import javax.swing.plaf.ColorUIResource;
+import javax.swing.plaf.FontUIResource;
+import java.io.*;
+import java.util.*;
+import java.awt.Color;
 
 /*
 Copyright (c) 2003-2012,  Pete Sanderson and Kenneth Vollmar
@@ -133,6 +153,69 @@ public class Launch {
     public static void main(String[] args){
         new Launch(args);
     }
+    public static void setDefaultFontSize(int size) {
+
+        Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
+        Object[] keys = keySet.toArray(new Object[keySet.size()]);
+
+        for (Object key : keys) {
+
+            if (key != null && key.toString().toLowerCase().contains("font")) {
+
+                //System.out.println(key);
+                Font font = UIManager.getDefaults().getFont(key);
+                if (font != null) {
+                    font = font.deriveFont((float)size);
+                    UIManager.put(key, font);
+                }
+
+            }
+
+        }
+
+    }
+    public static void setDefaultBorderSize(int size) {
+
+        Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
+        Object[] keys = keySet.toArray(new Object[keySet.size()]);
+
+        for (Object key : keys) {
+
+            if (key != null && key.toString().toLowerCase().contains("border")) {
+
+                //System.out.println(key);
+                Border border = UIManager.getDefaults().getBorder(key);
+                if (border != null) {
+                    UIManager.put(key, border);
+                }
+
+            }
+
+        }
+
+    }
+    public Properties readPropertiesFile(String fileName) throws IOException {
+        FileInputStream fis = null;
+        Properties prop = null;
+        try {
+            fis = new FileInputStream(fileName);
+            prop = new Properties();
+            prop.load(fis);
+        } catch(FileNotFoundException fnfe) {
+            fnfe.printStackTrace();
+
+        } catch(IOException ioe) {
+            ioe.printStackTrace();
+
+        }
+        finally {
+            try{
+                fis.close();
+            }catch(Exception e){
+                return null;}
+        }
+        return prop;
+    }
     private Launch(String[] args) {
         boolean gui = (args.length == 0);
         Globals.initialize(gui);
@@ -222,14 +305,127 @@ public class Launch {
     // There are no command arguments, so run in interactive mode by
     // launching the GUI-fronted integrated development environment.
 
-    private void launchIDE() {
+    private void launchIDE(){
         // System.setProperty("apple.laf.useScreenMenuBar", "true"); // Puts RARS menu on Mac OS menu bar
+
+
+        //prop.getProperty("font_size")
+        //prop.getProperty("border_size")
         SwingUtilities.invokeLater(
                 new Runnable() {
                     public void run() {
                         //Turn off metal's use of bold fonts
                         //UIManager.put("swing.boldMetal", Boolean.FALSE);
-                        new VenusUI("RARS " + Globals.version);
+
+                        try {
+                            //UIManager.setLookAndFeel(new mdlaf.MaterialLookAndFeel(new JMarsDarkTheme()));
+                            MaterialOceanicTheme theme = new MaterialOceanicTheme();
+                            MaterialLookAndFeel laf = new mdlaf.MaterialLookAndFeel(theme);
+                            ColorUIResource base = new ColorUIResource(34,37,43);
+                            ColorUIResource base_shade = new ColorUIResource(25,26,31);
+                            ColorUIResource active = new ColorUIResource(91,119,201);
+                            ColorUIResource menu_col = new ColorUIResource(41,42,45);
+                            ColorUIResource menu_col_active = new ColorUIResource(75,76,79);
+
+                            theme.setButtonBackgroundColor(base);
+                            theme.setButtonDefaultBackgroundColor(base);
+                            //theme.setButtonDefaultTextColor();
+                            theme.setButtonDefaultBackgroundColorMouseHover(base);
+                            theme.setButtonBackgroundColorMouseHover(base);
+                            theme.setBackgroundPrimary(base);
+                            theme.setSelectedInDropDownBackgroundComboBox(base);
+                            theme.setHighlightBackgroundPrimary(base);
+                            theme.setMenuBackground(menu_col);
+                            theme.setMenuBackgroundMouseHover(menu_col_active);
+                            theme.setMenuDisableBackground(base);
+
+                            theme.setBackgroundTextField(base);
+                            theme.setArrowButtonBackgroundSpinner(base);
+                            theme.setArrowButtonOnClickColorScrollBar(base);
+                            //theme.setDisableTextColor(MaterialColors.COSMO_BLACK);
+
+                            //theme.setTextColor(active);
+                            theme.setButtonFocusColor(active);
+                            theme.setButtonDefaultFocusColor(active);
+                            theme.setFocusColorLineTabbedPane(active);
+                            theme.setWithoutIconForegroundToggleButton(active);
+                            //theme.setMenuTextColor(active);
+
+
+                            theme.setDisableTextColor(base_shade);
+                            theme.setColorDividierSplitPane(base);
+                            theme.setSelectionBackgroundTable(base);
+                            theme.setBackgroundTableHeader(base);
+
+
+                            theme.setBackgroundPrimary(base);
+                            theme.setBackgroundSeparator(base_shade);
+                            theme.setHighlightBackgroundPrimary(base);
+
+                            theme.setBackgroundOptionPane(base);
+
+                            theme.setTitleBackgroundGradientEndTaskPane(base);
+                            theme.setHighlightBackgroundPrimary(active);
+                            theme.setBackgroundToolTip(base);
+                            theme.setContentBackgroundTaskPane(base);
+
+
+
+
+
+                            theme.setBackgroundTable(base);
+
+                            theme.setButtonBackgroundColor(base);
+                            theme.setButtonBackgroundColorMouseHover(base_shade);
+
+                            theme.setBackgroundTaskPane(base);
+                            theme.setBackgroundOptionPane(base);
+                            theme.setContentBackgroundTaskPane(base);
+                            theme.setTitleBackgroundGradientStartTaskPane(base);
+                            theme.setTitleBackgroundGradientEndTaskPane(base_shade);
+                            theme.setBackgroundTextField(base_shade);
+                            theme.setBackgroundToolTip(base_shade);
+
+                            theme.setContentBackgroundTaskPane(base);
+
+
+
+                            theme.setFontRegular(new FontUIResource(new Font("Helvetica Neue", Font.PLAIN, 20)));
+                            UIManager.setLookAndFeel(laf);
+                            UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder(0,0,0,0));
+                            UIManager.put("MenuBar.border", BorderFactory.createEmptyBorder(0,0,0,0));
+                            UIManager.put("MenuItem.border",BorderFactory.createEmptyBorder(0,0,0,0));
+                            UIManager.put("ToolBar.border", BorderFactory.createEmptyBorder(0,0,0,0));
+                            UIManager.put("MenuItem.disabledForeground", MaterialColors.GRAY_600);
+                            //UIManager.put("ToolBar.separatorSize",0);
+
+
+
+                            //UIManager.put("Button.border", BorderFactory.createLineBorder(Color.black, 4));
+                            UIManager.put("Button.border", BorderFactory.createLineBorder(MaterialColors.COSMO_BLACK,2));
+
+                        } catch (UnsupportedLookAndFeelException e) {
+                            e.printStackTrace();
+                        }
+                        //LOADING USER PREFERENCES
+                        Properties prop = null;
+                        try {
+                            prop = readPropertiesFile("theme.properties");
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        try{
+                            setDefaultFontSize(Integer.parseInt(prop.getProperty("font_size")));
+                            setDefaultBorderSize(Integer.parseInt(prop.getProperty("border_size")));
+                        }
+                        catch(Exception e){
+                            setDefaultFontSize(12);
+                            setDefaultBorderSize(0);
+
+
+                        };
+                        new VenusUI("M-RARS " + Globals.version);
                     }
                 });
     }

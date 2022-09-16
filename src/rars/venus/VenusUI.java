@@ -17,6 +17,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.net.URL;
 
+
 /*
 Copyright (c) 2003-2013,  Pete Sanderson and Kenneth Vollmar
 
@@ -124,6 +125,7 @@ public class VenusUI extends JFrame {
         mainUI = this;
         Globals.setGui(this);
         this.editor = new Editor(this);
+
 
         double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();

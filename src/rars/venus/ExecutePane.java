@@ -7,6 +7,7 @@ import rars.venus.registers.FloatingPointWindow;
 import rars.venus.registers.RegistersWindow;
 
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 
 /*
@@ -91,6 +92,9 @@ public class ExecutePane extends JDesktopPane {
         textSegment.setVisible(true);
         dataSegment.setVisible(true);
         labelValues.setVisible(labelWindowVisible);
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        this.setOpaque(true);
+        this.setBackground(base);
 
     }
 

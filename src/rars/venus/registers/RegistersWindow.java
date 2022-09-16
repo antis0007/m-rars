@@ -6,6 +6,7 @@ import rars.riscv.hardware.Register;
 import rars.riscv.hardware.RegisterFile;
 import rars.venus.NumberDisplayBaseChooser;
 
+import java.awt.*;
 import java.util.Arrays;
 
 public class RegistersWindow extends RegisterBlockWindow {
@@ -50,6 +51,7 @@ public class RegistersWindow extends RegisterBlockWindow {
 
     public RegistersWindow() {
         super(getRegisters(), regToolTips, "Current 32 bit value");
+
     }
 
     /*

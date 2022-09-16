@@ -9,6 +9,7 @@ import rars.simulator.SimulatorNotice;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -84,6 +85,8 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
     private static final Font monospacedPlain12Point = new Font("Monospaced", Font.PLAIN, 12);
     // The following is displayed in the Basic and Source columns if existing code is overwritten using self-modifying code feature
     private static final String modifiedCodeMarker = " ------ ";
+    ColorUIResource bright = new ColorUIResource(45,49,60);
+    ColorUIResource dark = new ColorUIResource(41,44,52);
 
     /**
      * Constructor, sets up a new JInternalFrame.
@@ -101,6 +104,7 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
         programArgumentsTextField = new JTextField(PROGRAM_ARGUMENT_TEXTFIELD_COLUMNS);
         programArgumentsTextField.setToolTipText("Arguments provided to program at runtime via a0 (argc) and a1 (argv)");
         programArgumentsPanel.add(programArgumentsTextField);
+
     }
 
 
@@ -182,6 +186,10 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
 
         tableScroller = new JScrollPane(table, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        tableScroller.setOpaque(true);
+
+        tableScroller.getViewport().setBackground(base);
         contentPane.add(tableScroller);
         if (Globals.getSettings().getBooleanSetting(Settings.Bool.PROGRAM_ARGUMENTS)) {
             addProgramArgumentsPanel();
@@ -822,12 +830,16 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
                 cell.setForeground(settings.getColorSettingByPosition(Settings.TEXTSEGMENT_HIGHLIGHT_FOREGROUND));
                 cell.setFont(settings.getFontByPosition(Settings.TEXTSEGMENT_HIGHLIGHT_FONT));
             } else if (row % 2 == 0) {
-                cell.setBackground(settings.getColorSettingByPosition(Settings.EVEN_ROW_BACKGROUND));
-                cell.setForeground(settings.getColorSettingByPosition(Settings.EVEN_ROW_FOREGROUND));
+                //cell.setBackground(settings.getColorSettingByPosition(Settings.EVEN_ROW_BACKGROUND));
+                cell.setBackground(dark);
+                //cell.setForeground(settings.getColorSettingByPosition(Settings.EVEN_ROW_FOREGROUND));
+                cell.setForeground(Color.white);
                 cell.setFont(settings.getFontByPosition(Settings.EVEN_ROW_FONT));
             } else {
-                cell.setBackground(settings.getColorSettingByPosition(Settings.ODD_ROW_BACKGROUND));
-                cell.setForeground(settings.getColorSettingByPosition(Settings.ODD_ROW_FOREGROUND));
+                //cell.setBackground(settings.getColorSettingByPosition(Settings.ODD_ROW_BACKGROUND));
+                cell.setBackground(bright);
+                //cell.setForeground(settings.getColorSettingByPosition(Settings.ODD_ROW_FOREGROUND));
+                cell.setForeground(Color.white);
                 cell.setFont(settings.getFontByPosition(Settings.ODD_ROW_FONT));
             }
             return cell;
@@ -847,11 +859,15 @@ public class TextSegmentWindow extends JInternalFrame implements Observer {
             cell.setFont(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT);
             cell.setHorizontalAlignment(SwingConstants.RIGHT);
             if (row % 2 == 0) {
-                cell.setBackground(Globals.getSettings().getColorSettingByPosition(Settings.EVEN_ROW_BACKGROUND));
-                cell.setForeground(Globals.getSettings().getColorSettingByPosition(Settings.EVEN_ROW_FOREGROUND));
+                //cell.setBackground(Globals.getSettings().getColorSettingByPosition(Settings.EVEN_ROW_BACKGROUND));
+                //cell.setForeground(Globals.getSettings().getColorSettingByPosition(Settings.EVEN_ROW_FOREGROUND));
+                cell.setBackground(dark);
+                cell.setForeground(Color.white);
             } else {
-                cell.setBackground(Globals.getSettings().getColorSettingByPosition(Settings.ODD_ROW_BACKGROUND));
-                cell.setForeground(Globals.getSettings().getColorSettingByPosition(Settings.ODD_ROW_FOREGROUND));
+                //cell.setBackground(Globals.getSettings().getColorSettingByPosition(Settings.ODD_ROW_BACKGROUND));
+                //cell.setForeground(Globals.getSettings().getColorSettingByPosition(Settings.ODD_ROW_FOREGROUND));
+                cell.setBackground(bright);
+                cell.setForeground(Color.white);
             }
             return cell;
         }

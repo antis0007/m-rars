@@ -47,6 +47,7 @@ public class MonoRightCellRenderer extends DefaultTableCellRenderer {
                 isSelected, hasFocus, row, column);
         cell.setFont(MONOSPACED_PLAIN_12POINT);
         cell.setHorizontalAlignment(SwingConstants.RIGHT);
+
         return cell;
     }
 }

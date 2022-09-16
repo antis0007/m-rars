@@ -7,6 +7,7 @@ import rars.riscv.*;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import java.awt.*;
@@ -75,6 +76,9 @@ public class HelpHelpAction extends GuiAction {
      * in help string.
      */
     public static final String descriptionDetailSeparator = ":";
+    ColorUIResource bright = new ColorUIResource(45,49,60);
+    ColorUIResource dark = new ColorUIResource(41,44,52);
+
 
     /**
      * Displays tabs with categories of information
@@ -376,12 +380,17 @@ public class HelpHelpAction extends GuiAction {
         // We just reconfigure the JLabel each time we're called.
         public Component getListCellRendererComponent(
                 JList<? extends String> list, // the list
+
                 String s, // value to display
                 int index, // cell index
                 boolean isSelected, // is the cell selected
                 boolean cellHasFocus) // does the cell have focus
         {
             setText(s);
+            list.setBackground(dark);
+            list.setForeground(bright);
+            list.setSelectionBackground(dark);
+            list.setSelectionForeground(bright);
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());

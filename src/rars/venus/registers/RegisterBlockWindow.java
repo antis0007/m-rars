@@ -1,5 +1,6 @@
 package rars.venus.registers;
 
+import mdlaf.utils.MaterialColors;
 import rars.Globals;
 import rars.Settings;
 import rars.riscv.hardware.AccessNotice;
@@ -14,6 +15,7 @@ import rars.venus.run.RunSpeedPanel;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -77,6 +79,7 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
         settings = Globals.getSettings();
         settings.addObserver(this);
         this.registers = registers;
+
         clearHighlighting();
         table = new MyTippedJTable(new RegTableModel(setupWindow()), registerDescriptions,
                 new String[]{"Each register has a tool tip describing its usage convention", "Corresponding register number", valueTip}) {
@@ -86,13 +89,21 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
         table.getColumnModel().getColumn(NUMBER_COLUMN).setPreferredWidth(25);
         table.getColumnModel().getColumn(VALUE_COLUMN).setPreferredWidth(60);
 
+
         // Display register values (String-ified) right-justified in mono font
         table.getColumnModel().getColumn(NAME_COLUMN).setCellRenderer(new RegisterCellRenderer(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT, SwingConstants.LEFT));
         table.getColumnModel().getColumn(NUMBER_COLUMN).setCellRenderer(new RegisterCellRenderer(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT, SwingConstants.RIGHT));
         table.getColumnModel().getColumn(VALUE_COLUMN).setCellRenderer(new RegisterCellRenderer(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT, SwingConstants.RIGHT));
         table.setPreferredScrollableViewportSize(new Dimension(200, 700));
         this.setLayout(new BorderLayout());  // table display will occupy entire width if widened
-        this.add(new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+        JScrollPane pane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        pane.setOpaque(true);
+
+        pane.getViewport().setBackground(base);
+        pane.setBorder(BorderFactory.createLineBorder(MaterialColors.COSMO_BLACK,1));
+        this.add(pane);
+
     }
 
     protected abstract String formatRegister(Register value, int base);
@@ -237,6 +248,8 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
     private class RegisterCellRenderer extends DefaultTableCellRenderer {
         private Font font;
         private int alignment;
+        ColorUIResource bright = new ColorUIResource(45,49,60);
+        ColorUIResource dark = new ColorUIResource(41,44,52);
 
         private RegisterCellRenderer(Font font, int alignment) {
             super();
@@ -255,12 +268,16 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
                 cell.setForeground(settings.getColorSettingByPosition(Settings.REGISTER_HIGHLIGHT_FOREGROUND));
                 cell.setFont(settings.getFontByPosition(Settings.REGISTER_HIGHLIGHT_FONT));
             } else if (row % 2 == 0) {
-                cell.setBackground(settings.getColorSettingByPosition(Settings.EVEN_ROW_BACKGROUND));
-                cell.setForeground(settings.getColorSettingByPosition(Settings.EVEN_ROW_FOREGROUND));
+                //cell.setBackground(settings.getColorSettingByPosition(Settings.EVEN_ROW_BACKGROUND));
+                //cell.setForeground(settings.getColorSettingByPosition(Settings.EVEN_ROW_FOREGROUND));
+                cell.setBackground(dark);
+                cell.setForeground(Color.white);
                 cell.setFont(settings.getFontByPosition(Settings.EVEN_ROW_FONT));
             } else {
-                cell.setBackground(settings.getColorSettingByPosition(Settings.ODD_ROW_BACKGROUND));
-                cell.setForeground(settings.getColorSettingByPosition(Settings.ODD_ROW_FOREGROUND));
+                //cell.setBackground(settings.getColorSettingByPosition(Settings.ODD_ROW_BACKGROUND));
+                //cell.setForeground(settings.getColorSettingByPosition(Settings.ODD_ROW_FOREGROUND));
+                cell.setBackground(bright);
+                cell.setForeground(Color.white);
                 cell.setFont(settings.getFontByPosition(Settings.ODD_ROW_FONT));
             }
             return cell;
@@ -362,6 +379,7 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
             columnToolTips = col;
             this.setRowSelectionAllowed(true); // highlights background color of entire row
             this.setSelectionBackground(Color.GREEN);
+
         }
 
         private String[] regToolTips;

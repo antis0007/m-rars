@@ -7,6 +7,7 @@ import rars.simulator.Simulator;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.NavigationFilter;
 import javax.swing.text.Position.Bias;
@@ -168,12 +169,17 @@ public class MessagesPane extends JTabbedPane {
                 });
         runTab = new JPanel(new BorderLayout());
         runTab.add(createBoxForButton(runTabClearButton), BorderLayout.WEST);
-        runTab.add(new JScrollPane(run, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
+        JScrollPane pane = new JScrollPane(run, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        pane.setOpaque(true);
+
+        pane.getViewport().setBackground(base);
+        runTab.add(pane, BorderLayout.CENTER);
 
         this.addTab("Messages", assembleTab);
         this.addTab("Run I/O", runTab);
-        this.setForeground(Color.BLACK);
+        //this.setForeground(Color.BLACK);
 
         this.setToolTipTextAt(0, "Messages produced by Run menu. Click on assemble error message to select erroneous line");
         this.setToolTipTextAt(1, "Simulated console input and output");

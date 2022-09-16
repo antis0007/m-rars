@@ -74,7 +74,7 @@ public class SettingsEditorAction extends GuiAction {
 
     private static final int gridVGap = 2;
     private static final int gridHGap = 2;
-    private static final Border ColorSelectButtonEnabledBorder = new BevelBorder(BevelBorder.RAISED, Color.WHITE, Color.GRAY);
+    //private static final Border ColorSelectButtonEnabledBorder = new BevelBorder(BevelBorder.RAISED, Color.WHITE, Color.GRAY);
     private static final Border ColorSelectButtonDisabledBorder = new LineBorder(Color.GRAY, 2);
 
     private static final String GENERIC_TOOL_TIP_TEXT = "Use generic editor (original RARS editor, similar to Notepad) instead of language-aware styled editor";
@@ -443,7 +443,7 @@ public class SettingsEditorAction extends GuiAction {
                     samples[count].setHorizontalAlignment(SwingConstants.CENTER);
                     samples[count].setBorder(BorderFactory.createLineBorder(Color.black));
                     samples[count].setText(sampleText[i]);
-                    samples[count].setBackground(Color.WHITE);
+                    //samples[count].setBackground(Color.WHITE);
                     samples[count].setToolTipText(SAMPLE_TOOL_TIP_TEXT);
                     foregroundButtons[count] = new ColorSelectButton(); // defined in SettingsHighlightingAction
                     foregroundButtons[count].addActionListener(new ForegroundChanger(count));

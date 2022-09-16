@@ -11,6 +11,7 @@ import rars.venus.util.RepeatButton;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
@@ -100,6 +101,8 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
     private int[] displayBaseAddresses;
     private int defaultBaseAddressIndex;
     private JButton[] baseAddressButtons;
+    ColorUIResource bright = new ColorUIResource(45,49,60);
+    ColorUIResource dark = new ColorUIResource(41,44,52);
 
     /**
      * Constructor for the Data Segment window.
@@ -174,6 +177,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
         features.add(asciiDisplayCheckBox);
 
         contentPane.add(features, BorderLayout.SOUTH);
+
     }
 
     public void updateBaseAddressComboBox() {
@@ -446,6 +450,10 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
         }
         dataTableScroller = new JScrollPane(dataTable, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        dataTableScroller.setOpaque(true);
+
+        dataTableScroller.getViewport().setBackground(base);
         return dataTableScroller;
     }
 
@@ -1019,12 +1027,16 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
                 cell.setForeground(settings.getColorSettingByPosition(Settings.DATASEGMENT_HIGHLIGHT_FOREGROUND));
                 cell.setFont(settings.getFontByPosition(Settings.DATASEGMENT_HIGHLIGHT_FONT));
             } else if (row % 2 == 0) {
-                cell.setBackground(settings.getColorSettingByPosition(Settings.EVEN_ROW_BACKGROUND));
-                cell.setForeground(settings.getColorSettingByPosition(Settings.EVEN_ROW_FOREGROUND));
+                //cell.setBackground(settings.getColorSettingByPosition(Settings.EVEN_ROW_BACKGROUND));
+                //cell.setForeground(settings.getColorSettingByPosition(Settings.EVEN_ROW_FOREGROUND));
+                cell.setBackground(dark);
+                cell.setForeground(Color.white);
                 cell.setFont(settings.getFontByPosition(Settings.EVEN_ROW_FONT));
             } else {
-                cell.setBackground(settings.getColorSettingByPosition(Settings.ODD_ROW_BACKGROUND));
-                cell.setForeground(settings.getColorSettingByPosition(Settings.ODD_ROW_FOREGROUND));
+                //cell.setBackground(settings.getColorSettingByPosition(Settings.ODD_ROW_BACKGROUND));
+                //cell.setForeground(settings.getColorSettingByPosition(Settings.ODD_ROW_FOREGROUND));
+                cell.setBackground(bright);
+                cell.setForeground(Color.white);
                 cell.setFont(settings.getFontByPosition(Settings.ODD_ROW_FONT));
             }
             return cell;

@@ -9,6 +9,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.CompoundEdit;
@@ -69,6 +70,12 @@ public class GenericTextArea extends JTextArea implements TextEditingArea {
         editAreaScrollPane = new JScrollPane(source,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        editAreaScrollPane.setOpaque(true);
+
+        editAreaScrollPane.getViewport().setBackground(base);
+
         editAreaScrollPane.getVerticalScrollBar().setUnitIncrement(
                 sourceCode.getFontMetrics(this.sourceCode.getFont()).getHeight());
 
@@ -137,7 +144,7 @@ public class GenericTextArea extends JTextArea implements TextEditingArea {
 
     public void setSourceCode(String s, boolean editable) {
         this.setText(s);
-        this.setBackground((editable) ? Color.WHITE : Color.GRAY);
+        //this.setBackground((editable) ? Color.WHITE : Color.GRAY);
         this.setEditable(editable);
         this.setEnabled(editable);
         this.getCaret().setVisible(editable);

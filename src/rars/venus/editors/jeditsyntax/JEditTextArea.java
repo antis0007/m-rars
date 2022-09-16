@@ -16,6 +16,7 @@ import rars.venus.editors.jeditsyntax.tokenmarker.TokenMarker;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.text.*;
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
@@ -106,7 +107,14 @@ public class JEditTextArea extends JComponent {
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         lineNumberScroller.setBorder(new javax.swing.border.EmptyBorder(1, 1, 1, 1));
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        lineNumberScroller.setOpaque(true);
+
+        lineNumberScroller.getViewport().setBackground(base);
         lineNumbersVertical = lineNumberScroller.getVerticalScrollBar();
+
+        lineNumbersVertical.setOpaque(true);
+        lineNumbersVertical.setBackground(base);
 
         // Initialize the GUI
         JPanel lineNumbersPlusPainter = new JPanel(new BorderLayout());

@@ -8,6 +8,7 @@ import rars.util.Binary;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -172,7 +173,11 @@ public class CacheSimulator extends AbstractToolAndApplication {
         logText.setBackground(debug ? Color.WHITE : logPanel.getBackground());
         logText.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         logText.setToolTipText("Displays cache activity log if enabled");
+
         logScroll = new JScrollPane(logText, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        logScroll.setOpaque(true);
+        logScroll.getViewport().setBackground(base);
         logPanel.add(logScroll);
         return logPanel;
     }

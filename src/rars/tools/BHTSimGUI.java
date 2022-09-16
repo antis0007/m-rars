@@ -28,6 +28,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 package rars.tools;//.bhtsim;
 
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.text.DecimalFormat;
@@ -129,7 +130,14 @@ public class BHTSimGUI extends JPanel {
 
         add(buildConfigPanel(), BorderLayout.NORTH);
         add(buildInfoPanel(), BorderLayout.WEST);
-        add(new JScrollPane(m_tabBHT), BorderLayout.CENTER);
+
+        JScrollPane pane = new JScrollPane(m_tabBHT);
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        pane.setOpaque(true);
+
+        pane.getViewport().setBackground(base);
+        add(pane, BorderLayout.CENTER);
+
         add(buildLogPanel(), BorderLayout.SOUTH);
     }
 

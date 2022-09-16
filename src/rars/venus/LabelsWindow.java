@@ -9,6 +9,7 @@ import rars.util.Binary;
 import rars.venus.run.RunAssembleAction;
 
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
@@ -213,6 +214,10 @@ public class LabelsWindow extends JInternalFrame {
         JScrollPane labelScrollPane = new JScrollPane(allSymtabTables,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        ColorUIResource base = new ColorUIResource(34,37,43);
+        labelScrollPane.setOpaque(true);
+        labelScrollPane.getViewport().setBackground(base);
+
         // Set file name label's max width to scrollpane's viewport width, max height to small.
         // Does it do any good?  Addressing problem that occurs when label (filename) is wider than
         // the table beneath it -- the table column widths are stretched to attain the same width and
