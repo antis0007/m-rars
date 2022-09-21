@@ -89,7 +89,7 @@ public class RunSpeedPanel extends JPanel {
         super(new BorderLayout());
         runSpeedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_INDEX_MIN, SPEED_INDEX_MAX, SPEED_INDEX_INIT);
         runSpeedSlider.setSize(new Dimension(100, (int) runSpeedSlider.getSize().getHeight()));
-        runSpeedSlider.setMaximumSize(new Dimension(100,100));
+        runSpeedSlider.setMinimumSize(new Dimension(100,100));
         runSpeedSlider.setMaximumSize(runSpeedSlider.getSize());
         runSpeedSlider.setMajorTickSpacing(5);
         runSpeedSlider.setPaintTicks(true); //Create the label table
@@ -97,7 +97,8 @@ public class RunSpeedPanel extends JPanel {
         sliderLabel = new JLabel(setLabel(runSpeedIndex));
         sliderLabel.setHorizontalAlignment(JLabel.CENTER);
         sliderLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.add(sliderLabel, BorderLayout.EAST);
+        //this.add(sliderLabel, BorderLayout.EAST);
+        this.add(sliderLabel, BorderLayout.SOUTH);
         this.add(runSpeedSlider, BorderLayout.CENTER);
         this.setToolTipText("Simulation speed for \"Go\".  At " +
                 ((int) speedTable[SPEED_INDEX_INTERACTION_LIMIT]) + " inst/sec or less, tables updated " +

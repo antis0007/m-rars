@@ -177,6 +177,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
         features.add(asciiDisplayCheckBox);
 
         contentPane.add(features, BorderLayout.SOUTH);
+        super.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
 
     }
 

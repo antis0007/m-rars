@@ -316,6 +316,12 @@ public class HelpHelpAction extends GuiAction {
 
         html.setCaretPosition(0); // this affects scroll position
         html.setEditable(false);
+        //html.setBackground(Color.WHITE);
+        html.setDisabledTextColor(Color.white);
+        html.setSelectedTextColor(Color.white);
+
+        //html.setText(html.getText().replaceAll("<p", "<p style='color: rgb(216, 217, 219);")); //SHITTY HTML COLOR OVERRIDE
+        html.setOpaque(true);
         return new JScrollPane(html, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
                 JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     }
@@ -344,6 +350,7 @@ public class HelpHelpAction extends GuiAction {
     private StringBuilder convertToHTMLTable(String[][] data, String[] headers) {
         StringBuilder sb = new StringBuilder("<table border=1>");
         sb.append("<tr>");
+
         for (String elem : headers) {
             sb.append("<td>").append(elem).append("</td>");
         }
@@ -356,6 +363,7 @@ public class HelpHelpAction extends GuiAction {
             sb.append("</tr>");
         }
         sb.append("</table>");
+
         return sb;
     }
 
@@ -367,11 +375,19 @@ public class HelpHelpAction extends GuiAction {
         try {
             while ((line = in.readLine()) != null) {
                 out.append(line).append("\n");
+                //style="color:blue"
             }
             in.close();
         } catch (IOException io) {
             return new StringBuilder(path + " could not be loaded.");
         }
+        int index = out.indexOf("<body");
+        //System.out.println(index);
+        //out = out.insert(index+5, " style='color:white'"); //COLOR OVERRIDE
+        //out = out.insert(index+5, " style='color:gray'"); //COLOR OVERRIDE
+        out.insert(index+5, " style='color: rgb(216, 217, 219);'"); //HTML COLOR OVERRIDE
+
+        //System.out.println(out.toString());
         return out;
 
     }
@@ -388,15 +404,16 @@ public class HelpHelpAction extends GuiAction {
         {
             setText(s);
             list.setBackground(dark);
-            list.setForeground(bright);
-            list.setSelectionBackground(dark);
-            list.setSelectionForeground(bright);
+            list.setForeground(Color.WHITE);
+            list.setSelectionBackground(Color.GRAY);
+            list.setSelectionForeground(Color.WHITE);
             if (isSelected) {
                 setBackground(list.getSelectionBackground());
                 setForeground(list.getSelectionForeground());
             } else {
-                setBackground((index % 2 == 0) ? altBackgroundColor : list.getBackground());
-                setForeground(list.getForeground());
+                setForeground(Color.WHITE);
+                setBackground((index % 2 == 0) ? dark : bright);
+
             }
             setEnabled(list.isEnabled());
             setFont(list.getFont());

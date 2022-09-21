@@ -79,7 +79,7 @@ public class VenusUI extends JFrame {
     Editor editor;
 
     // components of the menubar
-    private JMenu file, run, window, help, edit, settings;
+    private JMenu file, run, window, help, edit, settings, speed;
     private JMenuItem fileNew, fileOpen, fileClose, fileCloseAll, fileSave, fileSaveAs, fileSaveAll, fileDumpMemory, fileExit;
     private JMenuItem editUndo, editRedo, editCut, editCopy, editPaste, editFindReplace, editSelectAll;
     private JMenuItem runGo, runStep, runBackstep, runReset, runAssemble, runStop, runPause, runClearBreakpoints, runToggleBreakpoints;
@@ -201,7 +201,7 @@ public class VenusUI extends JFrame {
 
         JPanel jp = new JPanel(new FlowLayout(FlowLayout.LEFT));
         jp.add(toolbar);
-        jp.add(RunSpeedPanel.getInstance());
+        //jp.add(RunSpeedPanel.getInstance());
         JPanel center = new JPanel(new BorderLayout());
         center.add(jp, BorderLayout.NORTH);
         center.add(horizonSplitter);
@@ -513,6 +513,10 @@ public class VenusUI extends JFrame {
         run.setMnemonic(KeyEvent.VK_R);
         //window = new JMenu("Window");
         //window.setMnemonic(KeyEvent.VK_W);
+        speed = new JMenu("Speed");
+        speed.add(RunSpeedPanel.getInstance());
+
+
         settings = new JMenu("Settings");
         settings.setMnemonic(KeyEvent.VK_S);
         help = new JMenu("Help");
@@ -675,6 +679,7 @@ public class VenusUI extends JFrame {
         menuBar.add(file);
         menuBar.add(edit);
         menuBar.add(run);
+        menuBar.add(speed);
         menuBar.add(settings);
         JMenu toolMenu = ToolLoader.buildToolsMenu();
         if (toolMenu != null) menuBar.add(toolMenu);

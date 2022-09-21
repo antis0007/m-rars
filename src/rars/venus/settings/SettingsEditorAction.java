@@ -622,9 +622,11 @@ public class SettingsEditorAction extends GuiAction {
                 this.label = new JLabel(label);
                 add(this.label);
                 colorSelect = new ColorSelectButton(); // defined in SettingsHighlightingAction
+
                 color = Globals.getSettings().getColorSettingByPosition(index);
                 mode = Globals.getSettings().getColorModeByPosition(index);
                 colorSelect.setBackground(color);
+
                 colorSelect.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {

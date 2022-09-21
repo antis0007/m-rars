@@ -67,6 +67,10 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
     private static final int NAME_COLUMN = 0;
     private static final int NUMBER_COLUMN = 1;
     private static final int VALUE_COLUMN = 2;
+    private static final int ASCII_COLUMN = 3;
+
+    private static final int ASCII_COLUMN_REVERSE = 4;
+
 
     private Settings settings;
 
@@ -88,12 +92,16 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
         table.getColumnModel().getColumn(NAME_COLUMN).setPreferredWidth(50);
         table.getColumnModel().getColumn(NUMBER_COLUMN).setPreferredWidth(25);
         table.getColumnModel().getColumn(VALUE_COLUMN).setPreferredWidth(60);
+        table.getColumnModel().getColumn(ASCII_COLUMN).setPreferredWidth(30);
+        table.getColumnModel().getColumn(ASCII_COLUMN_REVERSE).setPreferredWidth(30);
 
 
         // Display register values (String-ified) right-justified in mono font
         table.getColumnModel().getColumn(NAME_COLUMN).setCellRenderer(new RegisterCellRenderer(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT, SwingConstants.LEFT));
         table.getColumnModel().getColumn(NUMBER_COLUMN).setCellRenderer(new RegisterCellRenderer(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT, SwingConstants.RIGHT));
         table.getColumnModel().getColumn(VALUE_COLUMN).setCellRenderer(new RegisterCellRenderer(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT, SwingConstants.RIGHT));
+        table.getColumnModel().getColumn(ASCII_COLUMN).setCellRenderer(new RegisterCellRenderer(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT, SwingConstants.RIGHT));
+        table.getColumnModel().getColumn(ASCII_COLUMN_REVERSE).setCellRenderer(new RegisterCellRenderer(MonoRightCellRenderer.MONOSPACED_PLAIN_12POINT, SwingConstants.RIGHT));
         table.setPreferredScrollableViewportSize(new Dimension(200, 700));
         this.setLayout(new BorderLayout());  // table display will occupy entire width if widened
         JScrollPane pane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -118,15 +126,29 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
      *
      * @return The array object with the data for the window.
      **/
+    private static String hexToAscii(String hexStr) {
+        StringBuilder output = new StringBuilder("");
 
+        for (int i = 2; i < hexStr.length(); i += 2) {
+            String str = hexStr.substring(i, i + 2);
+            output.append((char) Integer.parseInt(str, 16));
+        }
+
+        return output.toString();
+    }
     private Object[][] setupWindow() {
-        Object[][] tableData = new Object[registers.length][3];
+        Object[][] tableData = new Object[registers.length][5];
         for (int i = 0; i < registers.length; i++) {
             tableData[i][0] = registers[i].getName();
             int temp = registers[i].getNumber();
             tableData[i][1] = temp == -1 ? "" : temp;
             tableData[i][2] = formatRegister(registers[i],
                     NumberDisplayBaseChooser.getBase(settings.getBooleanSetting(Settings.Bool.DISPLAY_VALUES_IN_HEX)));
+            String hexval = tableData[i][2].toString();
+            hexval = hexToAscii(hexval);
+            tableData[i][3] = hexval;
+            String reverse = new StringBuffer(hexval).reverse().toString();
+            tableData[i][4] = reverse;
         }
         return tableData;
     }
@@ -164,6 +186,11 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
         for (int i = 0; i < registers.length; i++) {
             ((RegTableModel) table.getModel()).setDisplayAndModelValueAt(formatRegister(registers[i],
                     Globals.getGui().getMainPane().getExecutePane().getValueDisplayBase()), i, 2);
+            String hexval = table.getValueAt(i,2).toString();
+            hexval = hexToAscii(hexval);
+            String reverse = new StringBuffer(hexval).reverse().toString();
+            ((RegTableModel) table.getModel()).setDisplayAndModelValueAt(hexval, i, 3);
+            ((RegTableModel) table.getModel()).setDisplayAndModelValueAt(reverse, i, 4);
         }
     }
 
@@ -285,7 +312,7 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
     }
 
     private class RegTableModel extends AbstractTableModel {
-        final String[] columnNames = {"Name", "Number", "Value"};
+        final String[] columnNames = {"Name", "Number", "Value", "ASCII", "ASCII Reverse"};
         private Object[][] data;
 
         private RegTableModel(Object[][] d) {
@@ -337,8 +364,8 @@ public abstract class RegisterBlockWindow extends JPanel implements Observer {
             try {
                 val = Binary.stringToInt((String) value);
             } catch (NumberFormatException nfe) {
-                data[row][col] = "INVALID";
-                fireTableCellUpdated(row, col);
+                //data[row][col] = "INVALID";
+                //fireTableCellUpdated(row, col);
                 return;
             }
             //  Assures that if changed during program execution, the update will

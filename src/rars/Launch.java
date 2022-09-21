@@ -1,6 +1,8 @@
 package rars;
 
 import mdlaf.MaterialLookAndFeel;
+import mdlaf.animation.MaterialUIMovement;
+import mdlaf.components.button.MaterialButtonUI;
 import mdlaf.themes.JMarsDarkTheme;
 import mdlaf.themes.MaterialOceanicTheme;
 import mdlaf.themes.MaterialTheme;
@@ -301,6 +303,7 @@ public class Launch {
     }
 
 
+
     /////////////////////////////////////////////////////////////////
     // There are no command arguments, so run in interactive mode by
     // launching the GUI-fronted integrated development environment.
@@ -326,12 +329,14 @@ public class Launch {
                             ColorUIResource active = new ColorUIResource(91,119,201);
                             ColorUIResource menu_col = new ColorUIResource(41,42,45);
                             ColorUIResource menu_col_active = new ColorUIResource(75,76,79);
+                            ColorUIResource text_col = new ColorUIResource(216, 217, 219);
 
                             theme.setButtonBackgroundColor(base);
                             theme.setButtonDefaultBackgroundColor(base);
                             //theme.setButtonDefaultTextColor();
                             theme.setButtonDefaultBackgroundColorMouseHover(base);
                             theme.setButtonBackgroundColorMouseHover(base);
+
                             theme.setBackgroundPrimary(base);
                             theme.setSelectedInDropDownBackgroundComboBox(base);
                             theme.setHighlightBackgroundPrimary(base);
@@ -349,7 +354,18 @@ public class Launch {
                             theme.setButtonDefaultFocusColor(active);
                             theme.setFocusColorLineTabbedPane(active);
                             theme.setWithoutIconForegroundToggleButton(active);
+                            theme.setTextColor(text_col);
+
                             //theme.setMenuTextColor(active);
+
+                            theme.setTitleColorTaskPane(text_col);
+                            theme.setColorTextTitledBorder(text_col);
+                            theme.setTitleOverTaskPane(text_col);
+                            theme.setSpecialTitleOverTaskPane(text_col);
+                            theme.setTitleBackgroundGradientStartTaskPane(text_col);
+                            theme.setTitleBackgroundGradientEndTaskPane(text_col);
+
+
 
 
                             theme.setDisableTextColor(base_shade);
@@ -364,10 +380,16 @@ public class Launch {
 
                             theme.setBackgroundOptionPane(base);
 
-                            theme.setTitleBackgroundGradientEndTaskPane(base);
+
                             theme.setHighlightBackgroundPrimary(active);
                             theme.setBackgroundToolTip(base);
                             theme.setContentBackgroundTaskPane(base);
+
+                            theme.setTrackColorScrollBar(menu_col);
+                            theme.setThumbHighlightColorScrollBar(menu_col_active);
+                            theme.setThumbColorScrollBar(menu_col_active);
+                            theme.setThumbDarkShadowColorScrollBar(menu_col);
+                            theme.setThumbShadowColorScrollBar(menu_col);
 
 
 
@@ -381,14 +403,15 @@ public class Launch {
                             theme.setBackgroundTaskPane(base);
                             theme.setBackgroundOptionPane(base);
                             theme.setContentBackgroundTaskPane(base);
-                            theme.setTitleBackgroundGradientStartTaskPane(base);
-                            theme.setTitleBackgroundGradientEndTaskPane(base_shade);
+                            //theme.setTitleBackgroundGradientStartTaskPane(base);
+                            //theme.setTitleBackgroundGradientEndTaskPane(base_shade);
                             theme.setBackgroundTextField(base_shade);
                             theme.setBackgroundToolTip(base_shade);
 
                             theme.setContentBackgroundTaskPane(base);
 
 
+                            UIManager.put("Button.mouseHoverEnable", false);
 
                             theme.setFontRegular(new FontUIResource(new Font("Helvetica Neue", Font.PLAIN, 20)));
                             UIManager.setLookAndFeel(laf);
