@@ -10,11 +10,15 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.plaf.ColorUIResource;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.util.ArrayList;
 
 /*
 Copyright (c) 2003-2010,  Pete Sanderson and Kenneth Vollmar
@@ -151,7 +155,11 @@ public class GenericTextArea extends JTextArea implements TextEditingArea {
         this.setCaretPosition(0);
         if (editable) this.requestFocusInWindow();
     }
-
+    public void HighlightLoc(int start, int end){
+        sourceCode.setSelectionStart(start); // position cursor at word start
+        sourceCode.setSelectionEnd(start + end);
+        sourceCode.setSelectionStart(start);
+    }
     /**
      * Tell UndoManager to discard all its collected undoable edits.
      */
@@ -235,6 +243,38 @@ public class GenericTextArea extends JTextArea implements TextEditingArea {
     //
     // sourceCode is implemented as JTextArea rather than JTextPane but the necessary methods are inherited
     // by both from JTextComponent.
+    public ArrayList<Integer> doFindAllText(String find, boolean caseSensitive) {
+        int cursPosn = sourceCode.getCaretPosition();
+        int findPosn = 0; //START AT BEGINNING
+        int nextPosn = 0;
+        Highlighter hilit;
+        Highlighter.HighlightPainter painter;
+        hilit = new DefaultHighlighter();
+        painter = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
+
+        ArrayList<Integer> all_pos = new ArrayList<Integer>();
+        nextPosn = 0;
+        nextPosn = nextIndex(sourceCode.getText(), find, findPosn, caseSensitive);
+        while(nextPosn != -1){
+            all_pos.add(nextPosn);
+            nextPosn = nextIndex(sourceCode.getText(), find, findPosn, caseSensitive);
+            try {
+                hilit.addHighlight(nextPosn, nextPosn + find.length(), painter);
+            } catch (BadLocationException e) {
+
+            }
+        }
+
+        if (all_pos.size() > 0) {
+            sourceCode.setSelectionStart(nextPosn); // position cursor at word start
+            sourceCode.setSelectionEnd(nextPosn + find.length());
+            sourceCode.setSelectionStart(nextPosn);
+
+        } else {
+
+        }
+        return null;
+    }
 
     /**
      * Finds next occurrence of text in a forward search of a string. Search begins
@@ -259,6 +299,7 @@ public class GenericTextArea extends JTextArea implements TextEditingArea {
             return TEXT_NOT_FOUND;
         }
     }
+
 
     /**
      * Returns next posn of word in text - forward search.  If end of string is

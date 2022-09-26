@@ -431,11 +431,13 @@ public class Launch {
                             e.printStackTrace();
                         }
                         //LOADING USER PREFERENCES
-                        Properties prop = null;
+                        /*Properties prop = null;
                         try {
-                            prop = readPropertiesFile("theme.properties");
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            prop = readPropertiesFile("./theme.properties");
+                        } catch (Exception e) {
+                            //throw new RuntimeException(e);
+                            System.out.println(e);
+                            System.out.println("Could not load custom theme.properties file");
                         }
 
                         try{
@@ -445,9 +447,9 @@ public class Launch {
                         catch(Exception e){
                             setDefaultFontSize(12);
                             setDefaultBorderSize(0);
-
-
-                        };
+                        };*/
+                        setDefaultFontSize(12);
+                        setDefaultBorderSize(0);
                         new VenusUI("M-RARS " + Globals.version);
                     }
                 });

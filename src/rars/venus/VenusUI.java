@@ -742,6 +742,7 @@ public class VenusUI extends JFrame {
         Help = new JButton(helpHelpAction);
         Help.setText("");
 
+        //TOOLBAR ITEMS
         toolBar.add(New);
         toolBar.add(Open);
         toolBar.add(Save);
@@ -759,8 +760,11 @@ public class VenusUI extends JFrame {
         toolBar.add(new JToolBar.Separator());
         toolBar.add(Assemble);
         toolBar.add(Run);
-        toolBar.add(Step);
+
+
         toolBar.add(Backstep);
+        toolBar.add(Step);
+
         toolBar.add(Pause);
         toolBar.add(Stop);
         toolBar.add(Reset);

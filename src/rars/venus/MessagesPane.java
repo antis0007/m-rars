@@ -64,6 +64,7 @@ public class MessagesPane extends JTabbedPane {
     // must obviously be smaller than the former.
     public static final int MAXIMUM_SCROLLED_CHARACTERS = Globals.maximumMessageCharacters;
     public static final int NUMBER_OF_CHARACTERS_TO_CUT = Globals.maximumMessageCharacters / 10; // 10%
+    ColorUIResource active = new ColorUIResource(91,119,201);
 
     /**
      * Constructor for the class, sets up two fresh tabbed text areas for program feedback.
@@ -114,7 +115,7 @@ public class MessagesPane extends JTabbedPane {
                             // If error or warning, parse out the line and column number.
                             if (text.startsWith(ErrorList.ERROR_MESSAGE_PREFIX) || text.startsWith(ErrorList.WARNING_MESSAGE_PREFIX)) {
                                 assemble.select(lineStart, lineEnd);
-                                assemble.setSelectionColor(Color.YELLOW);
+                                assemble.setSelectionColor(active);
                                 assemble.repaint();
                                 int separatorPosition = text.indexOf(ErrorList.MESSAGE_SEPARATOR);
                                 if (separatorPosition >= 0) {
@@ -219,7 +220,7 @@ public class MessagesPane extends JTabbedPane {
                 textLine = assemble.getLineOfOffset(textPosition);
                 lineStart = assemble.getLineStartOffset(textLine);
                 lineEnd = assemble.getLineEndOffset(textLine);
-                assemble.setSelectionColor(Color.YELLOW);
+                assemble.setSelectionColor(active);
                 assemble.select(lineStart, lineEnd);
                 assemble.getCaret().setSelectionVisible(true);
                 assemble.repaint();

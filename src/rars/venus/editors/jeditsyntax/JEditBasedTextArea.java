@@ -16,6 +16,7 @@ import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.util.ArrayList;
 
 
 /**
@@ -282,11 +283,13 @@ public class JEditBasedTextArea extends JEditTextArea implements TextEditingArea
      * @return TEXT_FOUND or TEXT_NOT_FOUND, depending on the result.
      */
     public int doFindText(String find, boolean caseSensitive) {
-        int findPosn = sourceCode.getCaretPosition();
+        int cursPosn = sourceCode.getCaretPosition();
+        int findPosn = 0; //START AT BEGINNING
         int nextPosn = 0;
+
         nextPosn = nextIndex(sourceCode.getText(), find, findPosn, caseSensitive);
         if (nextPosn >= 0) {
-            sourceCode.requestFocus(); // guarantees visibility of the blue highlight 
+            //sourceCode.requestFocus(); // guarantees visibility of the blue highlight
             sourceCode.setSelectionStart(nextPosn); // position cursor at word start
             sourceCode.setSelectionEnd(nextPosn + find.length());
             // Need to repeat start due to quirk in JEditTextArea implementation of setSelectionStart.
@@ -295,6 +298,33 @@ public class JEditBasedTextArea extends JEditTextArea implements TextEditingArea
         } else {
             return TEXT_NOT_FOUND;
         }
+    }
+    public ArrayList<Integer> doFindAllText(String find, boolean caseSensitive) {
+        int cursPosn = sourceCode.getCaretPosition();
+        int findPosn = 0; //START AT BEGINNING
+        int nextPosn = 0;
+
+        ArrayList<Integer> all_pos = new ArrayList<Integer>();
+        nextPosn = 0;
+        nextPosn = nextIndex(sourceCode.getText(), find, findPosn, caseSensitive);
+        while(nextPosn != -1){
+            all_pos.add(nextPosn);
+            findPosn = nextPosn+find.length();
+            nextPosn = nextIndex(sourceCode.getText(), find, findPosn, caseSensitive);
+            //System.out.println(nextPosn);
+            if(nextPosn==-1){
+                break;
+            }
+            if(all_pos.contains(nextPosn)){
+                break;
+            }
+        }
+        return all_pos;
+    }
+    public void HighlightLoc(int start, int end){
+        sourceCode.setSelectionStart(start); // position cursor at word start
+        sourceCode.setSelectionEnd(end);
+        sourceCode.setSelectionStart(start);
     }
 
     /**

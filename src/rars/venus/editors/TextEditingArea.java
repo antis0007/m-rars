@@ -3,6 +3,7 @@ package rars.venus.editors;
 import javax.swing.text.Document;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.util.ArrayList;
 
 /*
 Copyright (c) 2003-2010,  Pete Sanderson and Kenneth Vollmar
@@ -50,6 +51,9 @@ public interface TextEditingArea {
     public void cut();
 
     public int doFindText(String find, boolean caseSensitive);
+    public ArrayList<Integer> doFindAllText(String find, boolean caseSensitive);
+
+    public void HighlightLoc(int start, int end);
 
     public int doReplace(String find, String replace, boolean caseSensitive);
 

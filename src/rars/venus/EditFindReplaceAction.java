@@ -5,36 +5,29 @@ import rars.venus.editors.TextEditingArea;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 	/*
 Copyright (c) 2003-2009,  Pete Sanderson and Kenneth Vollmar
-
 Developed by Pete Sanderson (psanderson@otterbein.edu)
 and Kenneth Vollmar (kenvollmar@missouristate.edu)
-
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
 to the following conditions:
-
-The above copyright notice and this permission notice shall be 
+The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
  */
 
@@ -47,7 +40,15 @@ public class EditFindReplaceAction extends GuiAction {
     private static final String DIALOG_TITLE = "Find and Replace";
     private MainPane mainPane;
 
-    private JDialog findReplaceDialog;
+    private VenusUI owner = Globals.getGui();
+
+    private JPanel findReplaceDialog;
+    private int findReplaceDialog_index;
+    private int findReplaceDialog_compcount = -1;
+    private int pos = 0;
+
+    private ArrayList<Integer> found = new ArrayList<>();
+
 
     public EditFindReplaceAction(String name, Icon icon, String descrip,
                                  Integer mnemonic, KeyStroke accel, VenusUI gui) {
@@ -56,7 +57,7 @@ public class EditFindReplaceAction extends GuiAction {
     }
 
     public void actionPerformed(ActionEvent e) {
-        findReplaceDialog = new FindReplaceDialog(Globals.getGui(), DIALOG_TITLE, false);
+        findReplaceDialog = new FindReplaceDialog(DIALOG_TITLE, false);
         findReplaceDialog.setVisible(true);
     }
 
@@ -64,7 +65,7 @@ public class EditFindReplaceAction extends GuiAction {
     //
     //   Private class to do all the work!
     //
-    private class FindReplaceDialog extends JDialog {
+    private class FindReplaceDialog extends JPanel {
         JButton findButton, replaceButton, replaceAllButton, closeButton;
         JTextField findInputField, replaceInputField;
         JCheckBox caseSensitiveCheckBox;
@@ -84,8 +85,25 @@ public class EditFindReplaceAction extends GuiAction {
         public static final String RESULTS_TEXT_REPLACED_ALL = "Replaced";
         public static final String RESULTS_NO_TEXT_TO_FIND = "No text to find";
 
-        public FindReplaceDialog(Frame owner, String title, boolean modality) {
-            super(owner, title, modality);
+        public FindReplaceDialog(String title, boolean modality) {
+            //super(owner, title, modality);
+            //super(owner.getMainPane().getEditPane().getLayout());
+            this.setLayout(owner.getMainPane().getEditPane().getLayout());
+            findReplaceDialog = buildDialogPanel();
+            if(findReplaceDialog_compcount == -1){
+                findReplaceDialog_compcount = owner.getMainPane().getEditPane().getComponentCount()+1; //GET MAX COMPCOUNT FOR EDITOR
+            }
+            if(owner.getMainPane().getEditPane().getComponentCount() == findReplaceDialog_compcount-1){ //IF COUNT = MAX
+                owner.getMainPane().getEditPane().add(findReplaceDialog, BorderLayout.SOUTH);
+                findReplaceDialog_index = owner.getMainPane().getEditPane().getComponentCount()-1;
+            }
+            else{
+
+            }
+            owner.revalidate();
+            owner.repaint();
+
+            /*
             this.setContentPane(buildDialogPanel());
             this.setDefaultCloseOperation(
                     JDialog.DO_NOTHING_ON_CLOSE);
@@ -97,21 +115,75 @@ public class EditFindReplaceAction extends GuiAction {
                     });
             this.pack();
             this.setLocationRelativeTo(owner);
-        }
 
+             */
+        }
+        class DialogKeyListener implements KeyListener {
+            public void keyTyped(KeyEvent e) {
+                //performFind();
+                performFindAll();
+            }
+            public void keyPressed(KeyEvent e) {
+                searchString = findInputField.getText();
+                int size = searchString.length();
+
+                //if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
+
+                //}
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+
+                    ScrollFound(0, 0);
+                    //System.out.println(pos + "POSITION");
+                    if(found.size() > 0) {
+                        if (pos >= found.size()) {
+                            pos = 0;
+                        }
+                        ScrollFound(found.get(pos), found.get(pos) + size);
+                        resultsLabel.setText(String.valueOf(found.size()) + " Found [" + (pos) + "]");
+                        if (pos < found.size()) {
+                            pos++;
+                        }
+
+                    }
+                    //System.out.println("ENTER");
+                    //performFind();
+                }
+
+            }
+            public void keyReleased(KeyEvent e) {
+            }
+        }
         // Constructs the dialog's main panel.
         private JPanel buildDialogPanel() {
             JPanel dialogPanel = new JPanel(new BorderLayout());
-            dialogPanel.setBorder(new javax.swing.border.EmptyBorder(10, 10, 10, 10));
+            dialogPanel.setBorder(new javax.swing.border.EmptyBorder(10, 10, 30, 10));
+            JButton close = new JButton("Close");
+            close.addActionListener(new CloseListener());
+            dialogPanel.add(close, BorderLayout.EAST);
+
             dialogPanel.add(buildInputPanel(), BorderLayout.NORTH);
             dialogPanel.add(buildOptionsPanel());
             dialogPanel.add(buildControlPanel(), BorderLayout.SOUTH);
+
             return dialogPanel;
+        }
+        private class CloseListener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //DO SOMETHING
+                //System.out.println("TEST");
+                owner.getMainPane().getEditPane().remove(findReplaceDialog_index);
+                owner.revalidate();
+                owner.repaint();
+
+
+            }
         }
 
         // Top part of the dialog, to contain the two input text fields.
         private Component buildInputPanel() {
             findInputField = new JTextField(30);
+            findInputField.addKeyListener(new DialogKeyListener());
             if (searchString.length() > 0) {
                 findInputField.setText(searchString);
                 findInputField.selectAll();
@@ -229,6 +301,27 @@ public class EditFindReplaceAction extends GuiAction {
                 resultsLabel.setText(findButton.getText() + ": " + RESULTS_NO_TEXT_TO_FIND);
             }
         }
+        private void performFindAll() {
+            resultsLabel.setText("");
+
+            if (findInputField.getText().length() > 0) {
+                // Being cautious. Should not be null because find/replace tool button disabled if no file open
+                EditPane editPane = mainPane.getEditPane();
+                if (editPane != null) {
+                    searchString = findInputField.getText();
+                    found = editPane.doFindAllText(searchString, caseSensitiveCheckBox.isSelected());
+                }
+                resultsLabel.setText(String.valueOf(found.size()) + " Found [" + (pos) + "]");
+            } else {
+                resultsLabel.setText(findButton.getText() + ": " + RESULTS_NO_TEXT_TO_FIND);
+            }
+
+        }
+        private void ScrollFound(int start, int end){
+            EditPane editPane = mainPane.getEditPane();
+            editPane.doHighlightLoc(start, end);
+        }
+
 
         // Performs a replace-and-find.  If the matched text is current selected with cursor at
         // its end, the replace happens immediately followed by a find for the next occurrence.
@@ -294,7 +387,7 @@ public class EditFindReplaceAction extends GuiAction {
         private void performClose() {
             caseSensitivity = caseSensitiveCheckBox.isSelected();
             this.setVisible(false);
-            this.dispose();
+            //this.dispose();
         }
         //
         ////////////////////////////////////////////////////////////////////////////////

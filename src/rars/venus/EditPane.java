@@ -17,6 +17,7 @@ import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -562,6 +563,12 @@ public class EditPane extends JPanel implements Observer {
      */
     public int doFindText(String find, boolean caseSensitive) {
         return sourceCode.doFindText(find, caseSensitive);
+    }
+    public ArrayList<Integer> doFindAllText(String find, boolean caseSensitive) {
+        return sourceCode.doFindAllText(find, caseSensitive);
+    }
+    public void doHighlightLoc(int start, int end)  {
+        sourceCode.HighlightLoc(start, end);
     }
 
     /**
